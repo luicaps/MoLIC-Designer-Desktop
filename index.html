@@ -1,0 +1,253 @@
+﻿<html ng-app="draw2dApp">
+<head>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <title>MoLIC Designer</title>
+
+    <!-- Stylesheets -->
+    <link type="text/css" rel="stylesheet" href="stylesheets/bootstrap.css" />
+    <link type="text/css" rel="stylesheet" href="stylesheets/styles.css" />
+    <link type="text/css" rel="stylesheet" href="stylesheets/contextmenu.css" />
+
+    <!-- libs -->
+    <script src="javascripts/lib/shifty.js"></script>
+    <script src="javascripts/lib/raphael.js"></script>
+    <script src="javascripts/lib/jquery-1.10.2.min.js"></script>
+    <script src="javascripts/lib/jquery.autoresize.js"></script>
+    <script src="javascripts/lib/jquery.contextmenu.js"></script>
+    <script src="javascripts/lib/rgbcolor.js"></script>
+    <script src="javascripts/lib/canvg.js"></script>
+    <script src="javascripts/lib/Class.js"></script>
+    <script src="javascripts/lib/json2.js"></script>
+    <script src="javascripts/lib/pathfinding-browser.min.js"></script>
+
+    <!-- Draw2D lib -->
+    <script src="javascripts/draw2d.js"></script>
+
+    <!-- Custom shape codes -->
+    <script src="javascripts/shape/Opening.js"></script>
+    <script src="javascripts/shape/Utterance.js"></script>
+    <script src="javascripts/shape/Breakdown.js"></script>
+    <script src="javascripts/shape/Closing.js"></script>
+    <script src="javascripts/shape/Processing.js"></script>
+    <script src="javascripts/shape/Scene.js"></script>
+    <script src="javascripts/shape/Ubiquitous.js"></script>
+</head>
+
+
+<body id="container" ng-controller="EditorController">
+
+    <nav  id="topnavbar" class="navbar navbar-default navbar-static-top" role="navigation">
+        <div class="container-fluid" style="margin-left: 0px;">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <p class="nav-item-name navbar-brand">MoLIC</p>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li><a href="#" ng-click="editor.open()" data-toggle="tooltip" data-placement="bottom" title="Abrir" id="btn-undo2"><img src="images/folder_open.png"></img><p class="nav-item-name">Abrir modelo</p></a></li>
+                <li><a href="#" ng-click="editor.save()" data-toggle="tooltip" data-placement="bottom" title="Salvar" id="btn-undo2"><img src="images/save.png"></img><p class="nav-item-name">Salvar modelo</p></a></li>
+                <li><a href="#" ng-disabled="!editor.state.canUndo" ng-click="editor.undo()" data-toggle="tooltip" data-placement="bottom" title="Desfazer" id="btn-undo2"><img src="images/undo.png"></img><p class="nav-item-name">Desfazer</p></a></li>
+                <li><a href="#" ng-disabled="!editor.state.canRedo" ng-click="editor.redo()" data-toggle="tooltip" data-placement="bottom" title="Refazer" id="btn-redo2"><img src="images/redo.png"><p class="nav-item-name">Refazer</p></a></li>
+                <li><a href="#" ng-click="editor.zoomIn()" data-toggle="tooltip" data-placement="bottom" title="Aproximar" id="btn-zoom-in2"><img src="images/zoom_in.png"><p class="nav-item-name">Aproximar</p></a></li>
+                <li><a href="#" ng-click="editor.zoomOut()" data-toggle="tooltip" data-placement="bottom" title="Afastar" id="btn-zoom-out2"><img src="images/zoom_out.png"><p class="nav-item-name">Afastar</p></a></li>
+                <li><a href="#" ng-click="editor.toFront()" data-toggle="tooltip" data-placement="bottom" title="Trazer para frente" id="btn-to-front2"><img src="images/to_front.png"><p class="nav-item-name">Trazer para frente</p></a></li>
+                <li><a href="#" ng-click="editor.toBack()" data-toggle="tooltip" data-placement="bottom" title="Levar para o fundo" id="btn-to-back2"><img src="images/to_back.png"><p class="nav-item-name">Levar para o fundo</p></a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Properties -->
+<div id="propertyPane" >
+    <div id="propertyHeader" class="highlight panetitle blackgradient">
+        Shape Properties
+    </div>
+
+    <div id="properties" ng-switch on="editor.selection.className">
+        <!-- Opening -->
+        <div ng-switch-when="molic.shape.Opening">
+            <div class="pane-heading" >Opening</div>
+            <div class="panel panel-default">
+                <div class="panel-heading" >Position</div>
+                <div class="panel-body" id="position_panel">
+                    <div class="form-group">
+                        x: <input class="form-control" type="number" ng-model="editor.selection.attr.x" />
+                        <br/>
+                        y: <input class="form-control" type="number" ng-model="editor.selection.attr.y" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Ending -->
+        <div ng-switch-when="molic.shape.Closing" >
+            <div class="panel-heading" >Closing</div>
+            <div class="panel panel-default">
+                <div class="panel-heading" >Position</div>
+                <div class="panel-body" id="position_panel">
+                    <div class="form-group">
+                        x: <input class="form-control" type="number" ng-model="editor.selection.attr.x" />
+                        <br/>
+                        y: <input class="form-control" type="number" ng-model="editor.selection.attr.y" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Processing -->
+        <div ng-switch-when="molic.shape.Processing" >
+            <div class="panel-heading" >System Processing</div>
+            <div class="panel panel-default">
+                <div class="pane-heading" >Position</div>
+                <div class="panel-body" id="position_panel">
+                    <div class="form-group">
+                        x: <input class="form-control" type="number" ng-model="editor.selection.attr.x" />
+                        <br>
+                        y: <input class="form-control" type="number" ng-model="editor.selection.attr.y" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Ubiquitous access -->
+        <div ng-switch-when="molic.shape.Ubiquitous" >
+            <div class="panel-heading" >Ubiquitous Access</div>
+            <div class="panel panel-default">
+                <div class="panel-heading" >Position</div>
+                <div class="panel-body" id="position_panel">
+                    <div class="form-group">
+                        x: <input class="form-control" type="number" ng-model="editor.selection.attr.x" />
+                        <br>
+                        y: <input class="form-control" type="number" ng-model="editor.selection.attr.y" >
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Scene -->
+        <div ng-switch-when="molic.shape.Scene">
+            <div class="panel-heading" >Scene</div>
+            <!-- Topic -->
+            <div class="panel panel-default">
+                <div class="panel-heading" >Data</div>
+                <div class="panel-body" id="position_panel">
+                    <div class="form-group">
+                        <table>
+                            <tr>
+                                <td>Topic:</td>
+                                <td>
+                                    <input class="form-control" ng-model="editor.selection.data.topic" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>dialogue:</td>
+                                <td>
+                                    <textarea cols="40" rows="5" class="form-control" ng-model="editor.selection.data.dialogue" ></textarea>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- Position -->
+            <div class="panel panel-default">
+                <div class="panel-heading" >Position</div>
+                <div class="panel-body" id="position_panel">
+                    <div class="form-group">
+                        <table>
+                            <tr>
+                                <td>x:</td>
+                                <td>
+                                    <input class="form-control" type="number" ng-model="editor.selection.attr.x" />
+                                    <br>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>y:</td>
+                                <td>
+                                    <input class="form-control" type="number" ng-model="editor.selection.attr.y" />
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Utterance Connection -->
+        <div ng-switch-when="molic.shape.Utterance">
+            <div class="panel-heading" >Utterance</div>
+            <!-- Utterance -->
+            <div class="panel panel-default">
+                <div class="panel-heading" >Data</div>
+                <div class="panel-body" id="position_panel">
+                    <div class="form-group">
+                        <table>
+                            <tr>
+                                <td>Utterance:</td>
+                                <td>
+                                    <input class="form-control" ng-model="editor.selection.data.utterance" />
+                                    <br>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Breakdown utterance -->
+        <div ng-switch-when="molic.shape.Breakdown">
+            <div class="panel-heading" >Breakdown Utterance</div>
+            <!-- Utterance -->
+            <div class="panel panel-default">
+                <div class="panel-heading" >Data</div>
+                <div class="panel-body" id="position_panel">
+                    <div class="form-group">
+                        <table>
+                            <tr>
+                                <td>Utterance:</td>
+                                <td>
+                                    <input class="form-control" ng-model="editor.selection.data.utterance" />
+                                    <br>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- End of properties -->
+</div>
+
+<!-- Shapes' palette -->
+<div id="palettePane" draw2d-palette></div>
+<!-- Design canvas -->
+<div class="container">
+<div id="canvas" draw2d-canvas></div>
+</div>
+</body>
+
+<!-- common libs -->
+<script src="javascripts/lib/angular.min.js"></script>
+<script src="javascripts/lib/jquery.browser.js"></script>
+<script src="javascripts/lib/jquery-ui-1.8.23.custom.min.js"></script>
+<script src="javascripts/lib/ui-bootstrap-tpls-0.11.2.min.js"></script>
+<script src="javascripts/lib/bootstrap.min.js"></script>
+
+<!-- draw2d directives -->
+<script src="javascripts/directrives/draw2d.js"></script>
+<script src="javascripts/directrives/canvas.js"></script>
+<script src="javascripts/directrives/palette.js"></script>
+
+<!-- application specific code -->
+<script src="javascripts/app.js"></script>
+<script src="javascripts/controllers/EditorController.js"></script>
+</html>

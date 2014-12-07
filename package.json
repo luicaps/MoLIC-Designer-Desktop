@@ -1,0 +1,11 @@
+{
+  "name": "hello",
+  "main": "index.html",
+  "window": {
+    "toolbar": true,
+    "title": "MoLIC",
+    "icon": "images/logo.png",
+    "width": 800,
+    "height": 600
+  }
+}
