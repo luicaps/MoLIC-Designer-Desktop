@@ -58,6 +58,11 @@ d2.directive("draw2dCanvas", ["$window","$parse", "$timeout", function($window,$
             var canvas = new draw2d.Canvas(element.attr("id"), scope.editor.canvas.width, scope.editor.canvas.height);
             canvas.setScrollArea("#"+element.attr("id"));
             canvas.onDrop = $.proxy(scope.editor.canvas.onDrop, canvas);
+            canvas.uninstallEditPolicy(new draw2d.policy.canvas.DefaultKeyboardPolicy());
+            canvas.installEditPolicy(new molic.policy.KeyboardPolicy(scope));
+
+            canvas.uninstallEditPolicy(new draw2d.policy.canvas.SelectionPolicy());
+            canvas.installEditPolicy(new molic.policy.SelectionPolicy());
 
             // update the scope model with the current state of the CommandStack
             var stack = canvas.getCommandStack();

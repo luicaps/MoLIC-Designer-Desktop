@@ -34,6 +34,8 @@
     <script src="javascripts/shape/Processing.js"></script>
     <script src="javascripts/shape/Scene.js"></script>
     <script src="javascripts/shape/Ubiquitous.js"></script>
+    <script src="javascripts/shape/KeyboardPolicy.js"></script>
+    <script src="javascripts/shape/SelectionPolicy.js"></script>
 </head>
 
 
@@ -231,7 +233,7 @@
 <div id="palettePane" draw2d-palette></div>
 <!-- Design canvas -->
 <div class="container">
-<div id="canvas" draw2d-canvas></div>
+<div id="canvas" draw2d-canvas><div id="mProperties" style="width: 300px; height: 150px; background: black; color: white;"><p>Hello world</p></div></div>
 </div>
 </body>
 
@@ -250,4 +252,13 @@
 <!-- application specific code -->
 <script src="javascripts/app.js"></script>
 <script src="javascripts/controllers/EditorController.js"></script>
+
+<script type="text/javascript">
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+        $('#mProperties').draggable();
+        $('#mProperties').hide();
+    })
+</script>
+
 </html>

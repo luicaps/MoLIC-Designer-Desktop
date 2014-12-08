@@ -16,10 +16,12 @@ var file = new gui.Menu();
 //Save
 file.append(new gui.MenuItem({
 	icon: 'images/save.png',
-	label: 'Salvar',
+	label: 'Salvar (Ctrl+S)',
 	click: function(){
 		console.log('save!');
-	}
+	},
+	key: 's',
+	modifiers: 'ctrl'
 }));
 
 //Save as
@@ -36,6 +38,7 @@ file.append(new gui.MenuItem({ label: 'Salvar como...', submenu: saveas }));
 
 file.append(new gui.MenuItem({ type: 'separator' }));
 
+/* Print not supported for now
 //Print
 file.append(new gui.MenuItem({
 	label: 'Imprimir',
@@ -45,6 +48,7 @@ file.append(new gui.MenuItem({
 }));
 
 file.append(new gui.MenuItem({ type: 'separator' }));
+*/
 
 //Close
 file.append(new gui.MenuItem({
@@ -60,7 +64,7 @@ var edit = new gui.Menu();
 //Undo
 edit.append(new gui.MenuItem({
 	icon: 'images/undo.png',
-	label: 'Desfazer',
+	label: 'Desfazer (Ctrl + Z)',
 	click: function(){
 		console.log('Undo!');
 	}
@@ -69,7 +73,7 @@ edit.append(new gui.MenuItem({
 //Redo
 edit.append(new gui.MenuItem({
 	icon: 'images/redo.png',
-	label: 'Refazer',
+	label: 'Refazer (Ctrl + Y)',
 	click: function(){
 		console.log('Redo!');
 	}

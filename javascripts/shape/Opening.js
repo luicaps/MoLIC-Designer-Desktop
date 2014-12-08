@@ -1,5 +1,5 @@
 //Forcing the creation of the base class
-var molic = {shape: {}};
+var molic = {shape: {}, policy: {}};
 /**
  * @class molic.shape.Opening
  * 
