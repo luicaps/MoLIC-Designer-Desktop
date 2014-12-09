@@ -6,9 +6,12 @@ molic.policy.SelectionPolicy =  draw2d.policy.canvas.SingleSelectionPolicy.exten
      * @constructor 
      * Creates a new Router object
      */
-     init: function(){
+     init: function(scope, selectRef){
         this._super();
         
+        this.scope = scope;
+        this.selectRef = selectRef;
+
         this.boundingBoxFigure1 =null;
         this.boundingBoxFigure2 =null;
         this.x = 0;
@@ -19,6 +22,7 @@ molic.policy.SelectionPolicy =  draw2d.policy.canvas.SingleSelectionPolicy.exten
         this.propClicked = propClicked;
         this.downIgnored = 0;
         this.prop = $('#mProperties');
+        
         this.prop.mousedown({pol : this}, function(e){
             console.log('el');
             e.data.pol.propClicked = 1;
@@ -26,11 +30,10 @@ molic.policy.SelectionPolicy =  draw2d.policy.canvas.SingleSelectionPolicy.exten
         this.prop.mouseup({pol : this}, function(e){
             e.data.pol.propClicked = 0;
         });
-
     },
 
     select: function(canvas, figure){
-     if(canvas.getSelection().getAll().contains(figure)){
+       if(canvas.getSelection().getAll().contains(figure)){
              return; // noting to to
          }
 
@@ -43,10 +46,10 @@ molic.policy.SelectionPolicy =  draw2d.policy.canvas.SingleSelectionPolicy.exten
          // inform all selection listeners about the new selection.
          //
          if(canvas.selectionListeners){
-             canvas.selectionListeners.each(function(i,w){
-                 w.onSelectionChanged(figure);
-             });
-         }
+           canvas.selectionListeners.each(function(i,w){
+               w.onSelectionChanged(figure);
+           });
+       }
 
          //Show or hide properties window
          if(canvas.getSelection().getSize()) {
@@ -54,6 +57,50 @@ molic.policy.SelectionPolicy =  draw2d.policy.canvas.SingleSelectionPolicy.exten
         } else {
             this.prop.hide();
         }
+
+        //this.scopeSelect(figure);
+        this.selectRef(figure);
+
+    },
+
+    scopeSelect: function(figure) {
+        console.log('me called');
+        var scope = this.scope;
+
+        // Update the selection in the model
+        // and Databinding Draw2D -> Angular
+        var changeCallback = function(emitter, attribute){
+            if(scope.editor.selection.attr!==null){
+                scope.editor.selection.attr[attribute]= emitter.attr(attribute);
+            }
+        };
+
+        if(figure!==null){
+            scope.editor.selection.className = figure.NAME;
+            scope.editor.selection.attr = figure.attr();
+            if(figure.NAME == "molic.shape.Scene") {
+                console.log('scene detected');
+                scope.editor.selection.data = {
+                    topic: figure.getTopic(),
+                    dialogue: figure.getDialogue()
+                };
+            }
+
+            if(figure.NAME == "molic.shape.Utterance" || figure.NAME == "molic.shape.Breakdown") {
+                scope.editor.selection.data = {
+                    utterance: figure.getUtterance(),
+                };
+            }
+        } else {
+            scope.editor.selection.className = null;
+            scope.editor.selection.attr = null;
+            scope.editor.selection.data = null;
+        }
+
+        // unregister and register the attr listener to the new figure
+        if(scope.editor.selection.figure!==null){scope.editor.selection.figure.off("change",changeCallback);}
+        scope.editor.selection.figure = figure;
+        if(scope.editor.selection.figure!==null){scope.editor.selection.figure.on("change",changeCallback);}
     },
 
      /**
@@ -155,15 +202,15 @@ molic.policy.SelectionPolicy =  draw2d.policy.canvas.SingleSelectionPolicy.exten
      	// drag/drop operation
         currentSelection = canvas.getSelection().getAll();
         currentSelection.each($.proxy(function(i,figure){
-         var canDragStart= figure.onDragStart(figure.getAbsoluteX(),figure.getAbsoluteY(), shiftKey, ctrlKey);
+           var canDragStart= figure.onDragStart(figure.getAbsoluteX(),figure.getAbsoluteY(), shiftKey, ctrlKey);
              // its a line
              if (figure instanceof draw2d.shape.basic.Line) {
 
              }
              else if(canDragStart===false){
-                 this.unselect(canvas,figure);
-             }
-         },this));
+               this.unselect(canvas,figure);
+           }
+       },this));
     },
 
     /**
@@ -199,12 +246,12 @@ molic.policy.SelectionPolicy =  draw2d.policy.canvas.SingleSelectionPolicy.exten
         }
 
         if (this.boundingBoxFigure1!==null) {
-           this.boundingBoxFigure1.setDimension(Math.abs(dx),Math.abs(dy));
-           this.boundingBoxFigure1.setPosition(this.x + Math.min(0,dx), this.y + Math.min(0,dy));
-           this.boundingBoxFigure2.setDimension(Math.abs(dx),Math.abs(dy));
-           this.boundingBoxFigure2.setPosition(this.x + Math.min(0,dx), this.y + Math.min(0,dy));
-       }
-   },
+         this.boundingBoxFigure1.setDimension(Math.abs(dx),Math.abs(dy));
+         this.boundingBoxFigure1.setPosition(this.x + Math.min(0,dx), this.y + Math.min(0,dy));
+         this.boundingBoxFigure2.setDimension(Math.abs(dx),Math.abs(dy));
+         this.boundingBoxFigure2.setPosition(this.x + Math.min(0,dx), this.y + Math.min(0,dy));
+     }
+ },
 
     /**
      * @method
@@ -238,14 +285,14 @@ molic.policy.SelectionPolicy =  draw2d.policy.canvas.SingleSelectionPolicy.exten
         else if(this.mouseDownElement!==null && this.mouseMovedDuringMouseDown===false){
             var sel =canvas.getSelection().getAll();
             if(!sel.contains(this.mouseDownElement)){
-               canvas.getSelection().getAll().each($.proxy(function(i,figure){
+             canvas.getSelection().getAll().each($.proxy(function(i,figure){
                 this.unselect(canvas, figure);
             },this));
-           }   
-       }
-       this._super(canvas, x,y, shiftKey, ctrlKey);
+         }   
+     }
+     this._super(canvas, x,y, shiftKey, ctrlKey);
 
-       if (this.boundingBoxFigure1!==null) {
+     if (this.boundingBoxFigure1!==null) {
         	// retrieve all figures which are inside the bounding box and select all of them
         	//
         	var selectionRect = this.boundingBoxFigure1.getBoundingBox();

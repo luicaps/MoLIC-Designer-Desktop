@@ -62,7 +62,8 @@ d2.directive("draw2dCanvas", ["$window","$parse", "$timeout", function($window,$
             canvas.installEditPolicy(new molic.policy.KeyboardPolicy(scope));
 
             canvas.uninstallEditPolicy(new draw2d.policy.canvas.SelectionPolicy());
-            canvas.installEditPolicy(new molic.policy.SelectionPolicy());
+
+            canvas.installEditPolicy(new draw2d.policy.canvas.CoronaDecorationPolicy());
 
             // update the scope model with the current state of the CommandStack
             var stack = canvas.getCommandStack();
@@ -82,7 +83,7 @@ d2.directive("draw2dCanvas", ["$window","$parse", "$timeout", function($window,$
                     }
                 },0);
             };
-            canvas.on("select", function(canvas,figure){
+            var selectRef = function(figure){
                 $timeout(function(){
                     if(figure!==null){
                         scope.editor.selection.className = figure.NAME;
@@ -110,7 +111,9 @@ d2.directive("draw2dCanvas", ["$window","$parse", "$timeout", function($window,$
                     scope.editor.selection.figure = figure;
                     if(scope.editor.selection.figure!==null){scope.editor.selection.figure.on("change",changeCallback);}
                 },0);
-});
+};
+
+            canvas.installEditPolicy(new molic.policy.SelectionPolicy(scope, selectRef));
 
             // Databinding: Angular UI -> Draw2D
             // it is neccessary to call the related setter of the draw2d object. "Normal" Angular 
