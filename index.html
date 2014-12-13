@@ -69,36 +69,22 @@
     </div>
 </nav>
 
-<!-- Properties -->
-<div id="propertyPane" >
-    <div id="propertyHeader" class="highlight panetitle blackgradient">
-        Shape Properties
-    </div>
-
-    <div id="properties" >
-
-    </div>
-
-
-    <!-- End of properties -->
-</div>
-
 <!-- Shapes' palette -->
 <div id="palettePane" draw2d-palette></div>
 <!-- Design canvas -->
 <div class="container">
-    <div id="canvas" draw2d-canvas>
-        <div id="mProperties" style="background: lightblue;" ng-switch on="editor.selection.className">
+    <div id="canvas" style="width: 100%; background-color: #dddddd;" draw2d-canvas>
+        <div id="mProperties" style="left: 376px; top: -480px;" class="panel-container" ng-switch on="editor.selection.className">
             <!-- Opening -->
             <div ng-switch-when="molic.shape.Opening">
-                <div class="pane-heading" >Opening</div>
+                <div class="panel-heading">Opening</div>
                 <div class="panel panel-default">
                     <div class="panel-heading" >Position</div>
                     <div class="panel-body" id="position_panel">
                         <div class="form-group">
-                            x: <input class="form-control" type="number" ng-model="editor.selection.attr.x" />
+                            x: <input class="form-control" type="text" ng-model="editor.selection.attr.x" />
                             <br/>
-                            y: <input class="form-control" type="number" ng-model="editor.selection.attr.y" />
+                            y: <input class="form-control" type="text" ng-model="editor.selection.attr.y" />
                         </div>
                     </div>
                 </div>
@@ -110,9 +96,9 @@
                     <div class="panel-heading" >Position</div>
                     <div class="panel-body" id="position_panel">
                         <div class="form-group">
-                            x: <input class="form-control" type="number" ng-model="editor.selection.attr.x" />
+                            x: <input class="form-control" type="text" ng-model="editor.selection.attr.x" />
                             <br/>
-                            y: <input class="form-control" type="number" ng-model="editor.selection.attr.y" />
+                            y: <input class="form-control" type="text" ng-model="editor.selection.attr.y" />
                         </div>
                     </div>
                 </div>
@@ -121,12 +107,12 @@
             <div ng-switch-when="molic.shape.Processing" >
                 <div class="panel-heading" >System Processing</div>
                 <div class="panel panel-default">
-                    <div class="pane-heading" >Position</div>
+                    <div class="panel-heading" >Position</div>
                     <div class="panel-body" id="position_panel">
                         <div class="form-group">
-                            x: <input class="form-control" type="number" ng-model="editor.selection.attr.x" />
+                            x: <input class="form-control" type="text" ng-model="editor.selection.attr.x" />
                             <br>
-                            y: <input class="form-control" type="number" ng-model="editor.selection.attr.y" />
+                            y: <input class="form-control" type="text" ng-model="editor.selection.attr.y" />
                         </div>
                     </div>
                 </div>
@@ -138,9 +124,9 @@
                     <div class="panel-heading" >Position</div>
                     <div class="panel-body" id="position_panel">
                         <div class="form-group">
-                            x: <input class="form-control" type="number" ng-model="editor.selection.attr.x" />
+                            x: <input class="form-control" type="text" ng-model="editor.selection.attr.x" />
                             <br>
-                            y: <input class="form-control" type="number" ng-model="editor.selection.attr.y" >
+                            y: <input class="form-control" type="text" ng-model="editor.selection.attr.y" >
                         </div>
                     </div>
                 </div>
@@ -179,14 +165,14 @@
                                 <tr>
                                     <td>x:</td>
                                     <td>
-                                        <input class="form-control" type="number" ng-model="editor.selection.attr.x" />
+                                        <input class="form-control" type="text" ng-model="editor.selection.attr.x" />
                                         <br>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>y:</td>
                                     <td>
-                                        <input class="form-control" type="number" ng-model="editor.selection.attr.y" />
+                                        <input class="form-control" type="text" ng-model="editor.selection.attr.y" />
                                     </td>
                                 </tr>
                             </table>

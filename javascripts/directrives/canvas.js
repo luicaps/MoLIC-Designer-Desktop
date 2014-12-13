@@ -9,7 +9,7 @@ d2.directive("draw2dCanvas", ["$window","$parse", "$timeout", function($window,$
             scope.editor= $.extend(true,{
                 canvas: {
                     width : 939,
-                    height: 618,
+                    height: 550,
                     onDrop: function(droppedDomNode, x, y, shiftKey, ctrlKey){}
                 },
                 palette:{
@@ -64,6 +64,11 @@ d2.directive("draw2dCanvas", ["$window","$parse", "$timeout", function($window,$
             canvas.uninstallEditPolicy(new draw2d.policy.canvas.SelectionPolicy());
 
             canvas.installEditPolicy(new draw2d.policy.canvas.CoronaDecorationPolicy());
+
+            var svg = $('#canvas')[0].firstChild;
+            console.log(svg);
+            //svg.css('border','1px solid black');
+            svg.setAttribute("style", "border: 1px solid black; background-color: white;");
 
             // update the scope model with the current state of the CommandStack
             var stack = canvas.getCommandStack();

@@ -26,6 +26,8 @@ molic.policy.SelectionPolicy =  draw2d.policy.canvas.SingleSelectionPolicy.exten
         this.prop.mousedown({pol : this}, function(e){
             console.log('el');
             e.data.pol.propClicked = 1;
+            console.log(e);
+            e.target.focus();
         });
         this.prop.mouseup({pol : this}, function(e){
             e.data.pol.propClicked = 0;

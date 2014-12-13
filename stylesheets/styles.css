@@ -149,19 +149,36 @@ body {
 }
 
 .panel{
-    border-left: 5px solid #3f51b5;
-    padding-left:15px;
-    margin-bottom:30px;
+    margin-bottom: 0px;
+    border-radius: 0px;
+    -webkit-box-shadow: 0px;
+    box-shadow: 0px;
 }
 
 .panel-heading{
-    font-size: 15px;
-    line-height: 32px;
     color: #212121;
     font-family: "RobotoDraft",sans-serif;
     font-weight: bold;
     margin: 0;
     text-rendering: optimizelegibility;
+    border-bottom: 1px solid transparent;
+    text-align: center;
+    padding: 0px;
+    border-top-left-radius: 0px;
+border-top-right-radius: 0px;
+}
+
+.panel-body {
+    padding: 5px 15px 2px 5px;
+}
+
+.form-group {
+    margin-bottom: 0px;
+}
+
+.panel-container {
+    width: 250px;
+    background-color: #dddddd;
 }
 
 input.form-control{
@@ -249,17 +266,17 @@ button.gray,a.gray,input[type=submit].gray {
 }
 
 .navbar-nav>li>a {
-   padding-top: 3px !important;
-   padding-bottom: 3px !important;
-   margin-top: 4px;
-   margin-bottom: 2px;
+ padding-top: 3px !important;
+ padding-bottom: 3px !important;
+ margin-top: 4px;
+ margin-bottom: 2px;
 }
 
 .navbar-collapse.in .navbar-nav>li>a {
-   padding-top: 3px !important;
-   padding-bottom: 3px !important;
-   margin-top: 2px;
-   margin-bottom: 2px;
+ padding-top: 3px !important;
+ padding-bottom: 3px !important;
+ margin-top: 2px;
+ margin-bottom: 2px;
 }
 
 .nav-item-name {
