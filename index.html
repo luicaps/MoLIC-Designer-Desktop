@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width, minimum-scale=1.0" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-    <title>MoLIC Designer</title>
+    <title>untitled - MoLIC Designer</title>
 
     <!-- Stylesheets -->
     <link type="text/css" rel="stylesheet" href="stylesheets/bootstrap.css" />
@@ -56,8 +56,8 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li><a href="#" ng-click="editor.open()" data-toggle="tooltip" data-placement="bottom" title="Abrir" id="btn-undo2"><img src="images/folder_open.png"></img><p class="nav-item-name">Abrir modelo</p></a></li>
-                <li><a href="#" ng-click="editor.save()" data-toggle="tooltip" data-placement="bottom" title="Salvar" id="btn-undo2"><img src="images/save.png"></img><p class="nav-item-name">Salvar modelo</p></a></li>
+                <li><a href="#" ng-click="keyboardPolicy.openFromFile()" data-toggle="tooltip" data-placement="bottom" title="Abrir" id="btn-undo2"><img src="images/folder_open.png"></img><p class="nav-item-name">Abrir modelo</p></a></li>
+                <li><a href="#" ng-click="keyboardPolicy.saveToFile()" data-toggle="tooltip" data-placement="bottom" title="Salvar" id="btn-undo2"><img src="images/save.png"></img><p class="nav-item-name">Salvar modelo</p></a></li>
                 <li><a href="#" ng-disabled="!editor.state.canUndo" ng-click="editor.undo()" data-toggle="tooltip" data-placement="bottom" title="Desfazer" id="btn-undo2"><img src="images/undo.png"></img><p class="nav-item-name">Desfazer</p></a></li>
                 <li><a href="#" ng-disabled="!editor.state.canRedo" ng-click="editor.redo()" data-toggle="tooltip" data-placement="bottom" title="Refazer" id="btn-redo2"><img src="images/redo.png"><p class="nav-item-name">Refazer</p></a></li>
                 <li><a href="#" ng-click="editor.zoomIn()" data-toggle="tooltip" data-placement="bottom" title="Aproximar" id="btn-zoom-in2"><img src="images/zoom_in.png"><p class="nav-item-name">Aproximar</p></a></li>
@@ -249,6 +249,14 @@ $(function () {
     $('[data-toggle="tooltip"]').tooltip();
     $('#mProperties').draggable();
     $('#mProperties').hide();
+
+    // Load native UI library
+    var ngui = require('nw.gui');
+
+    // Get the current window
+    var nwin = ngui.Window.get();
+    nwin.maximize();
+
 })
 </script>
 

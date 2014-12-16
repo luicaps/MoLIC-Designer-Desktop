@@ -59,7 +59,8 @@ d2.directive("draw2dCanvas", ["$window","$parse", "$timeout", function($window,$
             canvas.setScrollArea("#"+element.attr("id"));
             canvas.onDrop = $.proxy(scope.editor.canvas.onDrop, canvas);
             canvas.uninstallEditPolicy(new draw2d.policy.canvas.DefaultKeyboardPolicy());
-            canvas.installEditPolicy(new molic.policy.KeyboardPolicy(scope));
+            scope.keyboardPolicy = new molic.policy.KeyboardPolicy(scope, canvas);
+            canvas.installEditPolicy(scope.keyboardPolicy);
 
             canvas.uninstallEditPolicy(new draw2d.policy.canvas.SelectionPolicy());
 
